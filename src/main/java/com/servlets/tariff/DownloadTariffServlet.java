@@ -5,7 +5,9 @@ import com.service.TariffService;
 import com.service.TariffServiceImpl;
 
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,16 +27,24 @@ public class DownloadTariffServlet extends HttpServlet {
             stringBuilder.append(tariff);
             stringBuilder.append('\n');
         }
-        File file = new File("C:/Users/eduar/IdeaProjects/IPS/src/main/webapp/WEB-INF/sample.txt");
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(file));
-            writer.append(stringBuilder);
-        } finally {
-            if (writer != null) writer.close();
+        FileWriter file = new FileWriter("C://Users/eduar/Downloads/ips.txt");
+        file.write(String.valueOf(stringBuilder));
+        file.flush();
+        file.close();
+
+
+        File newFile = new File("C://Users/eduar/Downloads/ips.txt");
+        int length = 0;
+        ServletOutputStream outStream = resp.getOutputStream();
+        ServletContext context = getServletConfig().getServletContext();
+        String mimetype = context.getMimeType(String.valueOf(newFile));
+
+
+        if (mimetype == null) {
+            mimetype = "application/octet-stream";
+
         }
 
+
     }
-
-
 }
